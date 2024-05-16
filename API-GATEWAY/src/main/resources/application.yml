@@ -1,0 +1,31 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: API-GATEWAY
+
+
+
+  cloud:
+    gateway:
+      routes:
+        - id: POST-SERVICE    # name given to project by us
+          uri: lb://POST-SERVICE
+          predicates:
+            - Path=/api/posts/** # it will call this url ** means any url under this will be called
+
+        - id: COMMENT-SERVICE
+          uri: lb://COMMENT-SERVICE # NAME OF THE POST SERVICE
+          predicates:
+            - Path=/api/comments/** # THIS IS THE URL TO WHICH IT CONNECTS
+
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true  #true because this is client and it will interact with server
+    server-url:
+      defaultZone: http://localhost:8761/eureka
